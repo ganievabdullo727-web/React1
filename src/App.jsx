@@ -1,9 +1,25 @@
 import './App.css'
 
 import React from 'react'
+import Card from '../components/Card'
+import img1 from '/src/assets/img1.png'
 
-export default function App() {
+function App() {
+  let data = [
+    {
+      name:"Screen",
+      img:img1
+    }
+  ]
   return (
-    <div>App</div>
+    <>
+    {
+    data.map((e)=>{
+      return <Card {...e}/>
+    })
+    }
+    <Card name="Abdullo" />
+    </>
   )
 }
+export default App

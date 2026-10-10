@@ -4,7 +4,8 @@ const App = () => {
   let [data,setData] = useState([{
     id:1,
     name:"Abdullo",
-    age:16
+    age:16,
+    status:true
   }])
 let [search, setSearch] = useState("")
   let [open,setOpen] = useState(false)
@@ -21,7 +22,8 @@ let [search, setSearch] = useState("")
       let newUser = {
         id:Date.now(),
         name:e.target.name.value,
-        age:e.target.age.value
+        age:e.target.age.value,
+        status:e.target.status.value == 'true'
       }
       setData([...data,newUser])
       e.target.reset()
@@ -49,8 +51,12 @@ let filteredData = data.filter((e) =>
       <input className='search' type="text" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
 <div className='add'>
       <form  onSubmit={handleAdd}>
-        <input type="text" name='name' />
-        <input type="number" name='age' />
+        <input type="text" name='name' placeholder='Name...' />
+        <input type="number" name='age' placeholder='Age...' /> <br />
+        <select style={{marginTop:10}} name="status" id="">
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
         <button type='submit'>Add</button>
       </form>
       </div>
@@ -61,7 +67,9 @@ let filteredData = data.filter((e) =>
         return <div key={e.id}>
         <h1>{e.name}</h1>
         <p>{e.age}</p>
-        <button onClick={()=>handleDelete(e.id)}>Delete</button> <br />
+        <p>{e.status?'Active':'Inactive'}</p>
+        <button onClick={()=>handleDelete(e.id)}>Delete</button>
+        <input checked={e.status} onChange={()=> setData((prev)=> prev.map((el)=> el.id==e.id ? {...el,status:!el.status} : el))} type="checkbox" className='w-5 h-5 ml-2'  /> <br />
         <button onClick={()=>{setOpen(true),setEditName(e.name),setEditAge(e.age),setIdx(e.id)}}>edit</button>
         <button type="button" onClick={() => setOpen(false)}>
   Cancel

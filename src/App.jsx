@@ -164,7 +164,6 @@ function App() {
 
         <div className="flex flex-wrap items-center gap-[25px] justify-center xl:justify-normal pb-[20px]">
           <div className="flex flex-col items-center gap-[2px]">
-            {/* <p className='text-[#756D6D]'>Пол</p> */}
             <div className="flex gap-[7px] p-[10px] justify-center rounded-[20px] bg-[white] w-[65px]">
               <p className="text-[#493E3E] font-medium">Ж</p>
               <p className="text-[#493E3E] font-medium">М</p>

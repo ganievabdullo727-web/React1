@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Modal from './Modal'
+import { Button } from '@mui/material'
 
 const App = () => {
   const [data,setData] = useState([{
@@ -70,14 +71,14 @@ setOpenAdd((prev)=>!prev)
     <option value="true">Active</option>
     <option value="false">Inactive</option>
   </select>
-  <button className='border border-green-400 p-[10px] rounded-2xl text-green-500  text-xl' type='submit'>Save</button>
+  <Button variant="outlined" type="submit">Save</Button>
 </form>
 </Modal>
 <Modal open={openEdit} setOpen={setOpenEdit} title="Edit">
 <form  onSubmit={handleSubmitEdit} style={{display:'grid', width:"50%", margin:"0 auto", gap:"10px"}} action="">
   <input value={elemEdit?.name} onChange={(e)=>setElemEdit((prev)=>({...prev,name:e.target.value}))} name='name' placeholder='name' className='border border-grey p-[10px] rounded-lg' type="text" />
   <input value={elemEdit?.age} onChange={(e)=>setElemEdit((prev)=>({...prev,age:e.target.value}))} name='age' placeholder='age' className='border border-grey p-[10px] rounded-lg' type="text" />
-  <button className='border border-green-400 p-[10px] rounded-2xl text-green-500  text-xl' type='submit'>Save</button>
+  <Button variant="outlined" type="submit">Save</Button>
 </form>
 </Modal>
      

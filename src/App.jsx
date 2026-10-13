@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Modal from './Modal'
-import { Button } from '@mui/material'
+import { Button, TextField } from '@mui/material'
+import { red } from '@mui/material/colors'
 
 const App = () => {
   const [data,setData] = useState([{
@@ -48,7 +49,8 @@ setOpenAdd((prev)=>!prev)
   }
   return (
     <div>
-      <button onClick={()=>setOpenAdd((prev)=>!prev)}>Add+</button>
+
+            <Button sx={{color:"green", border:"1px solid green"}}  onClick={()=>setOpenAdd((prev)=>!prev)} variant="outlined" href="#outlined-buttons">Add+</Button>
       <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"15px", margin:"10px"}}>
          {
         data.map((e)=>{
@@ -56,17 +58,17 @@ setOpenAdd((prev)=>!prev)
             <h1>Name:{e.name}</h1>
             <p>Age: {e.age}</p>
             <p>Status:{e.status?'Active':'Inactive'}</p>
-            <button style={{padding:5}} onClick={()=>handleEdit(e)}>edit</button>
-            <button onClick={()=>handleDelete(e.id)}>delete</button>
+            <Button onClick={()=>handleEdit(e)} variant="outlined" href="#outlined-buttons">Edit</Button>
+            <Button sx={{color:"red", border:"1px solid red"}} onClick={()=>handleDelete(e.id)} variant="outlined" href="#outlined-buttons">Delete</Button>
             <input checked={e.status} onChange={()=> setData((prev)=> prev.map((el)=> el.id==e.id ? {...el,status:!el.status} : el))} type="checkbox" className='w-5 h-5 ml-2'  />
           </div>
         })
-      }
+}
       </div>
 <Modal open={openAdd} setOpen={setOpenAdd} title="Add">
 <form  onSubmit={handleSubmitAdd} style={{display:'grid', width:"50%", margin:"0 auto", gap:"10px"}} action="">
-  <input name='name' placeholder='name' className='border border-grey p-[10px] rounded-lg' type="text" />
-  <input name='age' placeholder='age' className='border border-grey p-[10px] rounded-lg' type="text" />
+  <TextField id="standard-basic" label="Name" variant="standard" name="name" placeholder="Name" />
+  <TextField id="standard-basic" label="Age" variant="standard" name="age" placeholder="Age" />  
   <select name="status" id="">
     <option value="true">Active</option>
     <option value="false">Inactive</option>
@@ -76,8 +78,8 @@ setOpenAdd((prev)=>!prev)
 </Modal>
 <Modal open={openEdit} setOpen={setOpenEdit} title="Edit">
 <form  onSubmit={handleSubmitEdit} style={{display:'grid', width:"50%", margin:"0 auto", gap:"10px"}} action="">
-  <input value={elemEdit?.name} onChange={(e)=>setElemEdit((prev)=>({...prev,name:e.target.value}))} name='name' placeholder='name' className='border border-grey p-[10px] rounded-lg' type="text" />
-  <input value={elemEdit?.age} onChange={(e)=>setElemEdit((prev)=>({...prev,age:e.target.value}))} name='age' placeholder='age' className='border border-grey p-[10px] rounded-lg' type="text" />
+    <TextField value={elemEdit?.name} onChange={(e)=>setElemEdit((prev)=>({...prev,name:e.target.value}))} id="standard-basic" label="Name" variant="standard" name="name" placeholder="Name" />
+  <TextField value={elemEdit?.age} onChange={(e)=>setElemEdit((prev)=>({...prev,age:e.target.value}))} id="standard-basic" label="Age" variant="standard" name="age" placeholder="Age" />
   <Button variant="outlined" type="submit">Save</Button>
 </form>
 </Modal>

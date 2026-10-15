@@ -38,11 +38,9 @@ import { Label } from "@/components/ui/label";
 function App() {
   const [data, setData] = useState([
     { name: "Hojiakbar", age: 17, status: true, id: 1 },
-    { name: "Abdullo", age: 16, status: false, id: 2 },
-    { name: "Abubakr", age: 15, status: true, id: 3 },
+    { name: "Jasur", age: 15, status: true, id: 3 },
     { name: "Alisher", age: 18, status: false, id: 4 },
-    { name: "Alisher", age: 18, status: true, id: 5 },
-    { name: "Rajab", age: 15, status: false, id: 6 },
+    { name: "Jurabek", age: 15, status: false, id: 6 },
   ]);
 
   const [openEdit, setEdit] = useState(false);
@@ -73,29 +71,17 @@ function App() {
     setElemEdit(null);
   };
 
-  const handleAdd = (e) => {
-    e.preventDefault();
+let handleAdd = (e) => {
+e.preventDefault()
 
-    const form = e.currentTarget;
-    const name = form.name.value.trim();
-    const age = Number(form.age.value);
-
-    if (!name || !form.age.value || !Number.isFinite(age) || age <= 0) {
-      return;
-    }
-
-    const newUser = {
-      id: Date.now(),
-      name,
-      age,
-      status: false,
-    };
-
-    setData((prev) => [...prev, newUser]);
-    setAdd(false);
-    form.reset();
-  };
-
+let newUser = {
+  id : Date.now(),
+name : e.target.name.value,
+age : Number(e.target.age.value)
+}
+setData((prev) => [...prev, newUser])
+setAdd((prev) => !prev)
+}
   return (
     <>
       <Table>
@@ -115,18 +101,31 @@ function App() {
 
               <TableCell>{el.age}</TableCell>
 
-              <TableCell
-                className={`${
-                  el.status ? "text-green-900" : "text-red-900"
-                } font-bold`}
-              >
-                {el.status ? "Active" : "Inactive"}
+              <TableCell>
+                <div className="flex flex-row-reverse items-center justify-end gap-2">
+                  <input
+                    type="checkbox"
+                    checked={el.status}
+                    onChange={() =>
+                      setData((prev) =>
+                        prev.map((item) =>
+                          item.id === el.id
+                            ? { ...item, status: !item.status }
+                            : item,
+                        ),
+                      )
+                    }
+                    className="w-5 h-5"
+                  />
+
+                  <span>{el.status ? "Active" : "Inactive"}</span>
+                </div>
               </TableCell>
 
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    render={<Button variant="outline">Actions</Button>}
+                    render={<Button variant="outline">:</Button>}
                   />
 
                   <DropdownMenuContent>
@@ -148,6 +147,7 @@ function App() {
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
+                    <DropdownMenuGroup></DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
@@ -200,7 +200,10 @@ function App() {
                 />
               </Field>
             </FieldGroup>
-
+            <select className="my-[10px] mt-[10px]" name="status" id="">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
             <DialogFooter className="mt-4">
               <DialogClose
                 render={

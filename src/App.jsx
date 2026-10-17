@@ -21,7 +21,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,13 +29,13 @@ import { Label } from "@/components/ui/label";
 let api = "https://to-dos-api.softclub.tj/api/to-dos";
 
 const App = () => {
-  let [addOpen, setAddOpen] = useState(false);
-let [name, setName] = useState("");
-let [description, setDescription] = useState("");
   let [open, setOpen] = useState(false);
+  let [addOpen, setAddOpen] = useState(false);
   let [editUser, setEditUser] = useState(null);
   let [editName, setEditName] = useState("");
   let [editStatus, setEditStatus] = useState(false);
+  let [name, setName] = useState("");
+  let [description, setDescription] = useState("");
   let [data, setData] = useState([]);
 
   async function get() {
@@ -48,109 +48,116 @@ let [description, setDescription] = useState("");
   }
 
   useEffect(() => {
-    get()
-  },[]);
+    get();
+  }, []);
 
   async function deleteUser(id) {
     try {
-      await axios.delete(
-        "https://to-dos-api.softclub.tj/api/to-dos?id=" + `${id}`,
-      );
+      await axios.delete(api + "?id=" + id);
       get();
     } catch (error) {
       console.log(error);
     }
   }
 
-async function editUserData(e) {
-  e.preventDefault();
+  async function editUserData(e) {
+    e.preventDefault();
 
-  try {
-    await axios.put(api, {
-      id: editUser.id,
-      name: editName,
-      description: editUser.description,
-    });
+    try {
+      await axios.put(api, {
+        id: editUser.id,
+        name: editName,
+        description: editUser.description,
+      });
 
-    get();
-    setOpen(false);
-  } catch (error) {
-    console.log(error);
+      get();
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
 
-async function addUser(e) {
-  e.preventDefault();
-
-  try {
-    let formData = new FormData();
-    formData.append("Name", name);
-    formData.append("Description", description);
-    formData.append("Images", "");
-
-    await axios.post(api, formData);
-
-    get();
-    setAddOpen(false);
-    setName("");
-    setDescription("");
-  } catch (error) {
-    console.log(error);
+  async function editCheckboxData(id) {
+    try {
+      await axios.put("https://to-dos-api.softclub.tj/completed?id=" + id);
+      get();
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
+
+  async function addUser(e) {
+    e.preventDefault();
+
+    try {
+      let formData = new FormData();
+      formData.append("Name", name);
+      formData.append("Description", description);
+      await axios.post(api, formData);
+      get();
+      setAddOpen(false);
+      setName("");
+      setDescription("");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div>
-
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-  <Button onClick={() => setAddOpen(true)}>Add</Button>
+        <Button onClick={() => setAddOpen(true)}>Add</Button>
 
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Add user</DialogTitle>
-    </DialogHeader>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add user</DialogTitle>
+          </DialogHeader>
 
-    <form onSubmit={addUser} className="space-y-4">
-      <div>
-        <Label>Name</Label>
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
+          <form onSubmit={addUser} className="space-y-4">
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
 
-      <div>
-        <Label>Description</Label>
-        <Input
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-      </div>
+            <div>
+              <Label>Description</Label>
+              <Input
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
 
-      <Button type="submit">Save</Button>
-    </form>
-  </DialogContent>
-</Dialog>
+            <Button type="submit">Save</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit user</DialogTitle>
           </DialogHeader>
 
-<form onSubmit={editUserData} className="space-y-4">
-  <div>
-    <Label>Name</Label>
-    <Input
-      value={editName}
-      onChange={(e) => setEditName(e.target.value)}
-    />
-  </div>
-    <Button type="submit">Save</Button>
-</form>
+          <form onSubmit={editUserData} className="space-y-4">
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                required
+              />
+            </div>
+
+            <Button type="submit">Save</Button>
+          </form>
         </DialogContent>
       </Dialog>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -168,6 +175,12 @@ async function addUser(e) {
               <TableCell>{e.isCompleted ? "Active" : "Inactive"}</TableCell>
 
               <TableCell className="text-right">
+                <input
+                  type="checkbox"
+                  checked={e.isCompleted}
+                  onChange={() => editCheckboxData(e.id)}
+                />
+
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     render={
@@ -189,7 +202,9 @@ async function addUser(e) {
                     >
                       Edit
                     </DropdownMenuItem>
+
                     <DropdownMenuSeparator />
+
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={() => deleteUser(e.id)}

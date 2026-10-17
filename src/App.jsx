@@ -106,7 +106,7 @@ const App = () => {
   return (
     <div>
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <Button onClick={() => setAddOpen(true)}>Add</Button>
+        <Button onClick={() => setAddOpen(true)}>Add+</Button>
 
         <DialogContent>
           <DialogHeader>

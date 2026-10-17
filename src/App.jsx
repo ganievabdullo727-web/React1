@@ -14,43 +14,24 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import React from "react";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Tooltip } from "@mui/material";
+import React, { useState } from "react";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { Tooltip, Button } from "@mui/material";
+import Modal from "./Modal";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleFirstPageButtonClick = (event) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (event) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (event) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (event) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
+      <IconButton onClick={(e) => onPageChange(e, 0)} disabled={page === 0}>
         {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
+
       <IconButton
-        onClick={handleBackButtonClick}
+        onClick={(e) => onPageChange(e, page - 1)}
         disabled={page === 0}
-        aria-label="previous page"
       >
         {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
@@ -58,10 +39,10 @@ function TablePaginationActions(props) {
           <KeyboardArrowLeft />
         )}
       </IconButton>
+
       <IconButton
-        onClick={handleNextButtonClick}
+        onClick={(e) => onPageChange(e, page + 1)}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
       >
         {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
@@ -69,10 +50,12 @@ function TablePaginationActions(props) {
           <KeyboardArrowRight />
         )}
       </IconButton>
+
       <IconButton
-        onClick={handleLastPageButtonClick}
+        onClick={(e) =>
+          onPageChange(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
+        }
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
       >
         {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
@@ -87,33 +70,68 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(name, calories, fat) {
-  return { name, calories, fat };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7),
-  createData("Donut", 452, 25.0),
-  createData("Eclair", 262, 16.0),
-  createData("Frozen yoghurt", 159, 6.0),
-  createData("Gingerbread", 356, 16.0),
-  createData("Honeycomb", 408, 3.2),
-  createData("Ice cream sandwich", 237, 9.0),
-  createData("Jelly Bean", 375, 0.0),
-  createData("KitKat", 518, 26.0),
-  createData("Lollipop", 392, 0.2),
-  createData("Marshmallow", 318, 0),
-  createData("Nougat", 360, 19.0),
-  createData("Oreo", 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
 const App = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [data, setData] = useState([
+    {
+      id: 1,
+      name: "Fasehuddin",
+      age: "19",
+      status: false,
+    },
+    {
+      id: 2,
+      name: "Muhammad",
+      age: 16,
+      status: false,
+    },
+  ]);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [elemEdit, setElemEdit] = useState(null);
+
+  const handleSubmitAdd = (event) => {
+    event.preventDefault();
+
+    const newUser = {
+      id: Date.now(),
+      name: event.target.name.value,
+      age: event.target.age.value,
+      status: false,
+    };
+
+    setData((prev) => [...prev, newUser]);
+    setOpenAdd(false);
+  };
+
+  const handleSubmitEdit = (event) => {
+    event.preventDefault();
+
+    setData((prev) =>
+      prev.map((e) => (e.id === elemEdit.id ? elemEdit : e))
+    );
+
+    setOpenEdit(false);
+  };
+
+  const handleDelete = (id) => {
+    setData((prev) => prev.filter((e) => e.id !== id));
+  };
+
+  const handleEdit = (e) => {
+    setOpenEdit(true);
+    setElemEdit({ ...e });
+  };
+
+  const handleStatus = (id) => {
+    setData((prev) =>
+      prev.map((e) =>
+        e.id === id ? { ...e, status: !e.status } : e
+      )
+    );
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -123,48 +141,64 @@ const App = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   return (
     <div>
+      <Button  onClick={() => setOpenAdd(true)}>
+        Add+
+      </Button>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
+              ? data.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : data
             ).map((row) => (
-              <TableRow key={row.name}>
+              <TableRow key={row.id}>
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
-                  {row.calories}
+
+                <TableCell align="right">{row.age}</TableCell>
+
+                <TableCell align="right">
+                  {row.status ? "Active" : "Inactive"}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
-                  {row.fat}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+
+                <TableCell align="right">
+                  <Button onClick={() => handleEdit(row)}>Edit</Button>
+
                   <Tooltip title="Delete">
-                    <IconButton>
-                    <DeleteForeverIcon/>
-                  </IconButton>
+                    <IconButton onClick={() => handleDelete(row.id)}>
+                      <DeleteForeverIcon />
+                    </IconButton>
                   </Tooltip>
 
-
+                  <input
+                    type="checkbox"
+                    checked={row.status}
+                    onChange={() => handleStatus(row.id)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
           </TableBody>
+
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={3}
-                count={rows.length}
+                rowsPerPageOptions={[
+                  5,
+                  10,
+                  25,
+                  { label: "All", value: -1 },
+                ]}
+                colSpan={4}
+                count={data.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 slotProps={{
@@ -183,6 +217,63 @@ const App = () => {
           </TableFooter>
         </Table>
       </TableContainer>
+
+      <Modal open={openAdd} setOpen={setOpenAdd} title="Add">
+        <form
+          onSubmit={handleSubmitAdd}
+          style={{
+            display: "grid",
+            width: "50%",
+            margin: "0 auto",
+            gap: "10px",
+          }}
+        >
+          <input name="name" placeholder="name" type="text" required />
+          <input name="age" placeholder="age" type="number" required />
+
+          <Button variant="outlined" type="submit">
+            Save
+          </Button>
+        </form>
+      </Modal>
+
+      <Modal open={openEdit} setOpen={setOpenEdit} title="Edit">
+        <form
+          onSubmit={handleSubmitEdit}
+          style={{
+            display: "grid",
+            width: "50%",
+            margin: "0 auto",
+            gap: "10px",
+          }}
+        >
+          <input
+            value={elemEdit?.name || ""}
+            onChange={(e) =>
+              setElemEdit((prev) => ({ ...prev, name: e.target.value }))
+            }
+            name="name"
+            placeholder="name"
+            type="text"
+            required
+          />
+
+          <input
+            value={elemEdit?.age || ""}
+            onChange={(e) =>
+              setElemEdit((prev) => ({ ...prev, age: e.target.value }))
+            }
+            name="age"
+            placeholder="age"
+            type="number"
+            required
+          />
+
+          <Button variant="outlined" type="submit">
+            Save
+          </Button>
+        </form>
+      </Modal>
     </div>
   );
 };

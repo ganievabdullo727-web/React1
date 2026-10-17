@@ -1,113 +1,108 @@
-import React, { useEffect, useState } from "react";
-import { MoreHorizontalIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { MoreHorizontalIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import axios from "axios";
+} from "@/components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import axios from "axios"
 
-let api = "https://to-dos-api.softclub.tj/api/to-dos";
+let api = "https://to-dos-api.softclub.tj/api/to-dos"
 
 const App = () => {
-  let [open, setOpen] = useState(false);
-  let [addOpen, setAddOpen] = useState(false);
-  let [editUser, setEditUser] = useState(null);
-  let [editName, setEditName] = useState("");
-  let [editStatus, setEditStatus] = useState(false);
-  let [name, setName] = useState("");
-  let [description, setDescription] = useState("");
-  let [data, setData] = useState([]);
+  let [data, setData] = useState([])
+  let [open, setOpen] = useState(false)
+  let [addOpen, setAddOpen] = useState(false)
+  let [editUser, setEditUser] = useState(null)
+  let [editName, setEditName] = useState("")
+  let [name, setName] = useState("")
+  let [description, setDescription] = useState("")
 
   async function get() {
     try {
-      let { data } = await axios.get(api);
-      setData(data.data);
+      let { data } = await axios.get(api)
+      setData(data.data)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   useEffect(() => {
-    get();
-  }, []);
+    get()
+  }, [])
 
   async function deleteUser(id) {
     try {
-      await axios.delete(api + "?id=" + id);
-      get();
+      await axios.delete(api + "?id=" + id)
+      get()
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   async function editUserData(e) {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       await axios.put(api, {
         id: editUser.id,
         name: editName,
         description: editUser.description,
-      });
+      })
 
-      get();
-      setOpen(false);
+      get()
+      setOpen(false)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
-  async function editCheckboxData(id) {
-    try {
-      await axios.put("https://to-dos-api.softclub.tj/completed?id=" + id);
-      get();
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   async function addUser(e) {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      let formData = new FormData();
-      formData.append("Name", name);
-      formData.append("Description", description);
-      await axios.post(api, formData);
-      get();
-      setAddOpen(false);
-      setName("");
-      setDescription("");
+      let formData = new FormData()
+      formData.append("Name", name)
+      formData.append("Description", description)
+
+      await axios.post(api, formData)
+
+      get()
+      setAddOpen(false)
+      setName("")
+      setDescription("")
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   return (
     <div>
-      <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <Button onClick={() => setAddOpen(true)}>Add+</Button>
+      <Button onClick={() => setAddOpen(true)}>Add+</Button>
 
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add user</DialogTitle>
@@ -159,28 +154,27 @@ const App = () => {
       </Dialog>
 
       <Table>
+        <TableCaption>A list of your recent tasks.</TableCaption>
+
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Description</TableHead>
+       <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {data.map((e) => (
             <TableRow key={e.id}>
-              <TableCell className="font-medium">{e.name}</TableCell>
+              <TableCell>{e.name}</TableCell>
+              <TableCell>
+                {e.isCompleted ? "Online" : "Ofline"}
+              </TableCell>
+              <TableCell>{e.description}</TableCell>
 
-              <TableCell>{e.isCompleted ? "Active" : "Inactive"}</TableCell>
-
-              <TableCell className="text-right">
-                <input
-                  type="checkbox"
-                  checked={e.isCompleted}
-                  onChange={() => editCheckboxData(e.id)}
-                />
-
+            <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     render={
@@ -194,10 +188,9 @@ const App = () => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={() => {
-                        setEditUser(e);
-                        setEditName(e.name);
-                        setEditStatus(e.isCompleted);
-                        setOpen(true);
+                        setEditUser(e)
+                        setEditName(e.name)
+                        setOpen(true)
                       }}
                     >
                       Edit
@@ -217,9 +210,17 @@ const App = () => {
             </TableRow>
           ))}
         </TableBody>
+
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={5}>
+              Total tasks: {data.length}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

@@ -34,6 +34,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import getFontSizes from "antd/es/theme/themes/shared/genFontSizes";
 
 function App() {
   const [data, setData] = useState([
@@ -71,17 +72,17 @@ function App() {
     setElemEdit(null);
   };
 
-let handleAdd = (e) => {
-e.preventDefault()
+  let handleAdd = (e) => {
+    e.preventDefault();
 
-let newUser = {
-  id : Date.now(),
-name : e.target.name.value,
-age : Number(e.target.age.value)
-}
-setData((prev) => [...prev, newUser])
-setAdd((prev) => !prev)
-}
+    let newUser = {
+      id: Date.now(),
+      name: e.target.name.value,
+      age: Number(e.target.age.value),
+    };
+    setData((prev) => [...prev, newUser]);
+    setAdd((prev) => !prev);
+  };
   return (
     <>
       <Table>
@@ -125,7 +126,7 @@ setAdd((prev) => !prev)
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    render={<Button variant="outline">:</Button>}
+                    render={<Button variant="outline" className="text-xl">:</Button>}
                   />
 
                   <DropdownMenuContent>

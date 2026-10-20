@@ -1,4 +1,7 @@
-.div{
+*{
+  background-color: black;
+}
+.div {
   margin: auto;
   text-align: center;
   padding: 30px;
@@ -6,11 +9,11 @@
   border: 1px solid blue;
   width: 500px;
 }
-.search{
-  width:80% ;
+.search {
+  width: 80%;
   margin: auto;
   padding: 8px;
 }
-.add{
+.add {
   margin-top: 10px;
 }

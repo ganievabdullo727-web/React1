@@ -1,12 +1,9 @@
-import React from 'react'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from '../Layout/Layout';
-import Birjha from './pages/Birjha';
-import Vorki from './pages/Vorki';
-import Konkursi from './pages/Konkursi';
-import Sozdatwork from './pages/Sozdatwork';
-import Sozdatzakaz from './pages/Sozdatzakaz';
-const App = () => {
+import Glavnaya from "./pages/Glavnaya";
+import Onas from "./pages/Onas";
+import Novosti from "./pages/Novosti";
+const App = () => {  
   const router = createBrowserRouter([
   {
     path:"/",
@@ -14,23 +11,15 @@ const App = () => {
     children:[
       {
    index:true,
-    element: <Birjha/>,
+    element: <Glavnaya/>
   },
   {
-    path:'/vorky',
-    element:<Vorki/>
+    path:'/onas',
+       element:<Onas/>
   },
   {
-    path:'/konkursi',
-    element:<Konkursi/>
-  },
-  {
-    path:'/sozdatwork',
-    element:<Sozdatwork/>
-  },
-  {
-    path:'/sozdatzakaz',
-    element:<Sozdatzakaz/>
+    path:'/novosti',
+    element:<Novosti/>
   }
     ]
   }

@@ -1,36 +1,32 @@
-import React, { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-export const App = () => {
-  let [searcParams,setSearchParams] = useSearchParams()
-  let [search,setSearch] = useState(searcParams.get("searchname")?searcParams.get("searchname"):"")
-  let [data,setData] = useState([
-   {
-    id:1,
-    name:"Hojiakbar"
-  },
-   {
-    id:2,
-    name:"Abdullo"
-  }
-])
-
-let handleSearch = (value) =>{
-  setSearch(value)
-  setSearchParams([["searchname",value]])
-}
-  return (
-    <div>
-      <input type="search" value={search} onChange={(e)=>handleSearch(e.target.value)} />
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from '../Layout/Layout';
+import Glavnaya from "./pages/Glavnaya";
+import Onas from "./pages/Onas";
+import Novosti from "./pages/Novosti";
+const App = () => {  
+  const router = createBrowserRouter([
+  {
+    path:"/",
+    element:<Layout/>,
+    children:[
       {
-        data.filter((ev)=>ev.name.toLowerCase().includes(search.trim().toLowerCase())).map((el)=>{
-          return <div>
-          <h1>
-              {el.name}
-          </h1>
-          </div>
-        })
-      }
-    </div>
+   index:true,
+    element: <Glavnaya/>
+  },
+  {
+    path:'/onas',
+       element:<Onas/>
+  },
+  {
+    path:'/novosti',
+    element:<Novosti/>
+  }
+    ]
+  }
+]);
+  return (
+  <RouterProvider router={router} />
   )
 }
+
+export default App

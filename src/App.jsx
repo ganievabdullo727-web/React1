@@ -1,8 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from '../Layout/Layout';
-import Glavnaya from "./pages/Glavnaya";
-import Onas from "./pages/Onas";
-import Novosti from "./pages/Novosti";
+import Courses from "./pages/Courses";
+import Aboutus from "./pages/Aboutus";
 const App = () => {  
   const router = createBrowserRouter([
   {
@@ -11,15 +10,11 @@ const App = () => {
     children:[
       {
    index:true,
-    element: <Glavnaya/>
+    element: <Aboutus/>
   },
   {
-    path:'/onas',
-       element:<Onas/>
-  },
-  {
-    path:'/novosti',
-    element:<Novosti/>
+    path:'/courses',
+    element:<Courses/>
   }
     ]
   }

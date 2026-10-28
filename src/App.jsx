@@ -1,27 +1,22 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from '../Layout/Layout';
+import Layout from "../Layout/Layout";
 import Courses from "./pages/Courses";
 import Aboutus from "./pages/Aboutus";
-const App = () => {  
-  const router = createBrowserRouter([
-  {
-    path:"/",
-    element:<Layout/>,
-    children:[
-      {
-   index:true,
-    element: <Aboutus/>
-  },
-  {
-    path:'/courses',
-    element:<Courses/>
-  }
-    ]
-  }
-]);
-  return (
-  <RouterProvider router={router} />
-  )
-}
+import Login from "./pages/Login";
 
-export default App
+const router = createBrowserRouter([
+  { path: "/login", element: <Login /> },
+  
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <Aboutus /> },
+      { path: "courses", element: <Courses /> },
+    ],
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
+
+export default App;

@@ -1,8 +1,10 @@
 import { api } from '../api'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const Courses = () => {
+  const { t } = useTranslation()
   const [data, setData] = useState([])
   const [search, setSearch] = useState("")
   const [selectCatalog, setSelectCatalog] = useState("")
@@ -69,30 +71,31 @@ const Courses = () => {
     <div className='max-w-6xl mx-auto px-4 py-10 flex flex-col gap-8'>
 
       {/* Users */}
-      <div className='rounded-2xl border border-gray-100 bg-white shadow-lg p-6'>
-        <h1 className='text-2xl font-bold text-gray-800 mb-4'>Users</h1>
+      <div className='rounded-2xl border border-gray-100 bg-white shadow-lg p-6 dark:bg-[#1e1e1e] dark:border-white/10'>
+        <h1 className='text-2xl font-bold text-gray-800 mb-4 dark:text-white'>{t("users")}</h1>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4'>
           {data.map((e) => {
             return (
               <div
                 key={e.id}
-                className='rounded-xl bg-[#FEDAD5] px-4 py-3 shadow-sm transition hover:shadow-md hover:-translate-y-0.5'
+                className='rounded-xl bg-[#FEDAD5] px-4 py-3 shadow-sm transition hover:shadow-md hover:-translate-y-0.5 dark:bg-[#3a2a27]'
               >
-                <h1 className='font-semibold text-gray-800'>{e.name}</h1>
+                <h1 className='font-semibold text-gray-800 dark:text-gray-100'>{e.name}</h1>
               </div>
             )
           })}
         </div>
       </div>
 
-      <div className='rounded-2xl border border-gray-100 bg-white shadow-lg p-6'>
-        <h1 className='text-2xl font-bold text-gray-800 mb-4'>Catalogs</h1>
+      {/* Catalogs */}
+      <div className='rounded-2xl border border-gray-100 bg-white shadow-lg p-6 dark:bg-[#1e1e1e] dark:border-white/10'>
+        <h1 className='text-2xl font-bold text-gray-800 mb-4 dark:text-white'>{t("catalogs")}</h1>
         <div className='flex flex-wrap gap-3'>
           {dataCatalog.map((e) => {
             return (
               <div
                 key={e.id}
-                className='rounded-full border border-[#FEDAD5] bg-white px-5 py-2 text-gray-700 font-medium transition hover:bg-[#FEDAD5]'
+                className='rounded-full border border-[#FEDAD5] bg-white px-5 py-2 text-gray-700 font-medium transition hover:bg-[#FEDAD5] dark:bg-transparent dark:border-[#5a3f3a] dark:text-gray-200 dark:hover:bg-[#3a2a27]'
               >
                 <h1>{e.name}</h1>
               </div>
@@ -101,13 +104,14 @@ const Courses = () => {
         </div>
       </div>
 
-      <div className='rounded-2xl border border-gray-100 bg-white shadow-lg p-6'>
+      {/* Products */}
+      <div className='rounded-2xl border border-gray-100 bg-white shadow-lg p-6 dark:bg-[#1e1e1e] dark:border-white/10'>
         <div className='flex flex-wrap items-center gap-4 mb-6'>
-          <h1 className='text-2xl font-bold text-gray-800'>Products</h1>
+          <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>{t("products")}</h1>
           <input
-            className='border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-[#e8a99f] focus:ring-2 focus:ring-[#FEDAD5]'
+            className='border border-gray-300 rounded-lg px-3 py-2 outline-none focus:border-[#e8a99f] focus:ring-2 focus:ring-[#FEDAD5] dark:bg-[#2a2a2a] dark:text-white dark:border-white/20 dark:placeholder:text-gray-400 dark:focus:ring-[#5a3f3a]'
             type="search"
-            placeholder='Поиск...'
+            placeholder={t("search")}
             value={search}
             onChange={(e) => {
               setSearch(e.target.value)
@@ -115,13 +119,13 @@ const Courses = () => {
             }}
           />
           <select
-            className='border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none focus:border-[#e8a99f] cursor-pointer'
+            className='border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none focus:border-[#e8a99f] cursor-pointer dark:bg-[#2a2a2a] dark:text-white dark:border-white/20'
             onChange={(e) => {
               setSelectCatalog(e.target.value)
               setDataProductsPage(1)
             }}
           >
-            <option value="">Все</option>
+            <option value="">{t("all")}</option>
             {dataCatalog.map((e) => {
               return (
                 <option key={e.id} value={e.id}>
@@ -137,12 +141,12 @@ const Courses = () => {
             return (
               <div
                 key={e.id}
-                className='flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 shadow-sm transition hover:bg-[#FEDAD5]/50 hover:shadow-md'
+                className='flex items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 shadow-sm transition hover:bg-[#FEDAD5]/50 hover:shadow-md dark:bg-[#2a2a2a] dark:border-white/10 dark:hover:bg-[#3a2a27]'
               >
-                <p className='flex h-8 w-8 items-center justify-center rounded-full bg-[#FEDAD5] text-sm font-bold text-gray-700'>
+                <p className='flex h-8 w-8 items-center justify-center rounded-full bg-[#FEDAD5] text-sm font-bold text-gray-700 dark:bg-[#3a2a27] dark:text-gray-100'>
                   {e.id}
                 </p>
-                <h1 className='font-semibold text-gray-800'>{e.name}</h1>
+                <h1 className='font-semibold text-gray-800 dark:text-gray-100'>{e.name}</h1>
               </div>
             )
           })}
@@ -150,7 +154,7 @@ const Courses = () => {
 
         <div className='mt-6 flex flex-wrap items-center justify-between gap-4'>
           <select
-            className='border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none focus:border-[#e8a99f] cursor-pointer'
+            className='border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none focus:border-[#e8a99f] cursor-pointer dark:bg-[#2a2a2a] dark:text-white dark:border-white/20'
             onChange={(e) => {
               setDataProductsLimit(Number(e.target.value))
               setDataProductsPage(1)
@@ -169,10 +173,10 @@ const Courses = () => {
                   key={page}
                   onClick={() => setDataProductsPage(page)}
                   className={
-                    'border px-4 py-2 rounded-xl cursor-pointer select-none transition hover:bg-[#FEDAD5] ' +
+                    'border px-4 py-2 rounded-xl cursor-pointer select-none transition hover:bg-[#FEDAD5] dark:hover:bg-[#3a2a27] ' +
                     (page === dataProductsPage
-                      ? 'bg-[#FEDAD5] border-[#e8a99f] font-bold'
-                      : 'bg-white border-gray-200')
+                      ? 'bg-[#FEDAD5] border-[#e8a99f] font-bold dark:bg-[#3a2a27] dark:text-white'
+                      : 'bg-white border-gray-200 dark:bg-[#2a2a2a] dark:border-white/10 dark:text-gray-100')
                   }
                 >
                   {page}

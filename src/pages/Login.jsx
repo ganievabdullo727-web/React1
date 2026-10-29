@@ -12,7 +12,6 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     const obj = {
       email: e.target.email.value,
       password: e.target.password.value,

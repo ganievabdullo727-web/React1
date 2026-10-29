@@ -1,73 +1,69 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useTranslation } from "react-i18next";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./Slider.css";
 
-const slides = [
-  { title: "Слайд 1", text: "Короткое описание первого слайда" },
-  { title: "Слайд 2", text: "Короткое описание второго слайда" },
-  { title: "Слайд 3", text: "Короткое описание третьего слайда" },
-  { title: "Слайд 4", text: "Короткое описание четвёртого слайда" },
-  { title: "Слайд 5", text: "Короткое описание пятого слайда" },
-  { title: "Слайд 6", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 7", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 8", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 9", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 10", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 11", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 12", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 13", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 14", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 15", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 16", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 17", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 18", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 19", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 20", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 21", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 22", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 23", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 24", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 25", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 26", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 27", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 28", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 29", text: "Короткое описание шестого слайда" },
-  { title: "Слайд 30", text: "Короткое описание шестого слайда" }
+let items = [
+  { name: "HTML5", img: "/Group 12 (1).svg" },
+  { name: "CSS3", img: "/Group 13.svg" },
+  { name: "Sass", img: "/Vector.svg" },
+  { name: "JavaScript", img: "/Group (6).svg" },
+  { name: "React", img: "/Group 14.svg" },
+  { name: "Bootstrap", img: "/public/bootstrap.svg" },
+  { name: "Git", img: "/public/git.svg" },
+  { name: "Figma", img: "/public/figma.svg" },
+  { name: "NodeJS", img: "/public/Group (9).png" },
+  { name: "MySQL", img: "/public/Vector (1).svg" },
+  { name: "MongoDB", img: "/public/Vector (24).png" },
+  { name: "TypeScript", img: "/public/Group (10).png" },
+  { name: "english", img: "/public/image 18.svg", translate: true },
+  { name: "spanish", img: "/public/image 19.svg", translate: true },
+  { name: "C++", img: "/public/image 20.svg" },
+  { name: "C", img: "/public/image 17.svg" },
 ];
 
 export default function Slider() {
+  const { t } = useTranslation();
+
   return (
-    <Swiper
-      className="pretty-slider"
-      modules={[Navigation, Pagination, Autoplay]}
-      centeredSlides
-      slidesPerView="auto"
-      spaceBetween={24}
-      speed={1500}
-      grabCursor
-      loop
-      loopAdditionalSlides={2}
-      navigation
-      pagination={{ clickable: true }}
-      autoplay={{
-        delay: 1200,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      }}
-    >
-      {slides.map((s, i) => (
-        <SwiperSlide key={i}>
-          <div className="slide-card">
-            <span className="slide-num">{String(i + 1).padStart(2, "0")}</span>
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-          </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="skills">
+      <Swiper
+        className="skills-slider"
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={24}
+        slidesPerView={2}
+        speed={800}
+        grabCursor
+        loop
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        breakpoints={{
+          520: { slidesPerView: 3 },
+          768: { slidesPerView: 4 },
+          1024: { slidesPerView: 5 },
+        }}
+      >
+        {items.map(({ name, img, translate }) => {
+          const label = translate ? t(name) : name;
+          return (
+            <SwiperSlide key={name}>
+              <div className="skill">
+                <img src={img} alt={label} />
+                <span>{label}</span>
+              </div>
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+    </div>
   );
 }

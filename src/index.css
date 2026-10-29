@@ -150,16 +150,17 @@ body {
   padding: 16px;
   border-radius: 8px;
 }
+html,
+body {
+  background-color: #eaf3ff; /* светлая тема: светло-голубой */
+  color: #111;
+}
+
 html.dark,
 html.dark body {
-  background-color: #121212;
-  color: white;
+  background-color: #0b1b33; /* тёмная тема: тёмно-синий */
+  color: #fff;
 }
-   html.dark,
-   html.dark body {
-     background-color: #121212;
-     color: white;
-   }
    html.theme-transition,
 html.theme-transition *,
 html.theme-transition *::before,

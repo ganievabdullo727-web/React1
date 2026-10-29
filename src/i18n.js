@@ -20,6 +20,8 @@ i18n.use(initReactI18next).init({
         email: "Почта",
         role: "Роль",
         city: "Город",
+        english: "Английский C1/C2",
+        spanish: "Испанский B1/B2",
       },
     },
     en: {
@@ -39,6 +41,8 @@ i18n.use(initReactI18next).init({
         email: "Email",
         role: "Role",
         city: "City",
+        english: "English C1/C2",
+        spanish: "Spanish B1/B2",
       },
     },
     tg: {
@@ -58,6 +62,8 @@ i18n.use(initReactI18next).init({
         email: "Почта",
         role: "Нақш",
         city: "Шаҳр",
+        english: "Англисӣ C1/C2",
+        spanish: "Испанӣ B1/B2",
       },
     },
   },

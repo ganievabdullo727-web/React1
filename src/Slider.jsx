@@ -13,17 +13,7 @@ let items = [
   { name: "Sass", img: "/Vector.svg" },
   { name: "JavaScript", img: "/Group (6).svg" },
   { name: "React", img: "/Group 14.svg" },
-  { name: "Bootstrap", img: "/public/bootstrap.svg" },
-  { name: "Git", img: "/public/git.svg" },
-  { name: "Figma", img: "/public/figma.svg" },
-  { name: "NodeJS", img: "/public/Group (9).png" },
-  { name: "MySQL", img: "/public/Vector (1).svg" },
-  { name: "MongoDB", img: "/public/Vector (24).png" },
-  { name: "TypeScript", img: "/public/Group (10).png" },
-  { name: "english", img: "/public/image 18.svg", translate: true },
-  { name: "spanish", img: "/public/image 19.svg", translate: true },
-  { name: "C++", img: "/public/image 20.svg" },
-  { name: "C", img: "/public/image 17.svg" },
+  
 ];
 
 export default function Slider() {

@@ -14,7 +14,7 @@ export default function LanguageSelect() {
         value={i18n.language}
         onChange={changeLang}
         aria-label="Language"
-        className="appearance-none cursor-pointer rounded-lg border border-black/10 bg-white/80 py-2 pl-4 pr-9 text-sm font-bold text-gray-800 shadow-sm outline-none transition hover:bg-white focus:border-[#e8a99f] focus:ring-2 focus:ring-[#FEDAD5] dark:border-white/20 dark:bg-[#3a2a27] dark:text-white dark:hover:bg-[#4a3a36] dark:focus:ring-[#5a3f3a]"
+        className="appearance-none cursor-pointer rounded-lg border border-[#7aa7e8]/10 bg-white/80 py-2 pl-4 pr-9 text-sm font-bold text-gray-800 shadow-sm outline-none transition hover:bg-white focus:border-[#e8a99f] focus:ring-2 focus:ring-[#FEDAD5] dark:border-white/20 dark:bg-[#092f64] dark:text-white dark:hover:bg-[#092f64] dark:focus:ring-[#093b81]"
       >
         <option
           value="ru"
@@ -36,7 +36,6 @@ export default function LanguageSelect() {
         </option>
       </select>
 
-      {/* стрелка */}
       <svg
         className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600 dark:text-gray-300"
         viewBox="0 0 20 20"

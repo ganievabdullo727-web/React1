@@ -11,7 +11,7 @@ export default function ThemeButton() {
       aria-checked={isDark}
       aria-label="Переключить тему"
       className={`relative w-16 h-8 rounded-full border border-black/10 shadow-inner cursor-pointer transition-colors duration-300 ${
-        isDark ? "bg-[#4a3a36]" : "bg-white/70"
+        isDark ? "bg-[#042758]" : "bg-white/70"
       }`}
     >
       <span

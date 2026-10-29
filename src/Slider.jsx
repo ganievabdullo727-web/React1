@@ -13,7 +13,12 @@ let items = [
   { name: "Sass", img: "/Vector.svg" },
   { name: "JavaScript", img: "/Group (6).svg" },
   { name: "React", img: "/Group 14.svg" },
-  
+  { name: "Bootstrap", img: "/public/bootstrap.svg" },
+  { name: "Git", img: "/public/git.svg" },
+  { name: "Figma", img: "/public/figma.svg" },
+  { name: "NodeJS", img: "/public/Group (9).png" },
+  { name: "MySQL", img: "/public/Vector (1).svg" },
+  { name: "MongoDB", img: "/public/Vector (24).png" },
 ];
 
 export default function Slider() {

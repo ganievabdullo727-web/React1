@@ -6,19 +6,24 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./Slider.css";
-
+import img1 from "/public/bootstrap.svg"
+import img2 from "/public/git.svg"
+import img3 from "/public/figma.svg"
+import img4 from "/public/Group (9).png"
+import img5 from "/public/Vector (1).svg"
+import img6 from "/public/Vector (24).png"
 let items = [
-  { name: "HTML5", img: "/Group 12 (1).svg" },
+  { name: "HTML5", img: "/Group 12 (1).svg"  },
   { name: "CSS3", img: "/Group 13.svg" },
   { name: "Sass", img: "/Vector.svg" },
   { name: "JavaScript", img: "/Group (6).svg" },
   { name: "React", img: "/Group 14.svg" },
-  { name: "Bootstrap", img: "/public/bootstrap.svg" },
-  { name: "Git", img: "/public/git.svg" },
-  { name: "Figma", img: "/public/figma.svg" },
-  { name: "NodeJS", img: "/public/Group (9).png" },
-  { name: "MySQL", img: "/public/Vector (1).svg" },
-  { name: "MongoDB", img: "/public/Vector (24).png" },
+  { name: "Bootstrap", img:img1 },
+  { name: "Git", img:img2 },
+  { name: "Figma", img:img3 },
+  { name: "NodeJS", img:img4 },
+  { name: "MySQL", img:img5 },
+  { name: "MongoDB", img:img6 },
 ];
 
 export default function Slider() {

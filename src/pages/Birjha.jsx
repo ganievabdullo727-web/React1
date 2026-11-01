@@ -1,308 +1,221 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { products, blogPosts } from "../data";
 
 const Birjha = () => {
+  const [categories, setCategories] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState(200);
+
+  async function getCategories() {
+    let res = await fetch("https://test-swagger-2ph6.onrender.com/catalogs");
+    let data = await res.json();
+    setCategories(data);
+  }
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const filteredProducts = products.filter((el) => el.price <= selectedPrice);
+
   return (
-    <div className="max-w-[1200px] mx-auto">
-      <div className="border-2 p-[20px] h-[550px] bg-[#F7F6FF] border-dashed  border-[black] flex justify-around items-center mt-[100px]">
-        <div className="flex flex-col gap-[20px] text-left">
-          <h1 className="text-[40px]">
-            Покупайте фриланс-услуги в <br />{" "}
-            <span className="text-[#1DBF73]">два клика</span>
-          </h1>
-          <p>
-            Ворк — единица работы продавца, которую <br /> можно купить как
-            товар в магазине
-          </p>
-          <div className="flex bg-[#F2F0FE] p-[3px] gap-[10px]  w-[420px] rounded-full">
-            <input
-              type="search"
-              className=" bg-[#F2F0FE] p-[15px] w-[400px] rounded-full"
-              placeholder="Что нужно сделать?"
-            />
-            <button className="bg-[#FBA457] text-[#F2F0FE] w-[120px] rounded-full p-[15px]">
-              Найти
+    <div className="max-w-[1200px] mx-auto px-[16px] py-[16px] text-[#3D3D3D]">
+      <div className="rounded-[16px] lg:rounded-none bg-[#F5F5F580] p-[20px] lg:px-[48px] lg:py-[40px]">
+        <div className="flex items-center justify-between">
+          <div className="max-w-[55%] lg:max-w-[400px]">
+            <p className="text-[11px] lg:text-[14px]">WELCOME TO GREENSHOP</p>
+            <h1 className="mt-[8px] text-[24px] lg:text-[48px] font-black">
+              LET'S MAKE A BETTER <span className="text-[#46A358]">PLANET</span>
+            </h1>
+            <p className="mt-[12px] text-[12px] lg:text-[14px] text-gray-500">
+              We are an online plant shop offering a wide range of cheap and
+              trendy plants.
+            </p>
+            <button className="mt-[16px] text-[14px] text-[#46A358] lg:bg-[#46A358] lg:text-white lg:px-[24px] lg:py-[8px] lg:rounded-[6px]">
+              SHOP NOW
             </button>
           </div>
-          <h1 className="text-[18px]">Выберите рубрику, чтобы начать</h1>
-          <div className="w-[450px] gap-[15px] flex flex-wrap justify-around text-left">
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              Тексты и переводы{" "}
-            </button>
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              Разработка{" "}
-            </button>
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              Дизайн
-            </button>
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              Аудио, видео монтаж{" "}
-            </button>
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              SEO и оптимизация
-            </button>
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              Бизнес и жизнь{" "}
-            </button>
-            <button className="border border-[#F2F0FE] text-[#222222] rounded-full p-[3px]">
-              Соцсети и реклама
-            </button>
-            <button className="border border-[#FBA457] text-[#FBA457] rounded-full p-[3px]">
-              Все категории
-            </button>
-          </div>
+          <img
+            src="/public/01 1.png"
+            alt="Plant"
+            className="h-[144px] lg:h-[400px] object-contain"
+          />
         </div>
-        <img
-          className="w-[35%] h-[85%]"
-          src="/public/Group 11 (1).png"
-          alt=""
-        />
       </div>
 
-      <section className="mt-[100px] p-[10px]">
-        <h1 className="text-[25px]">Актуальные ворки</h1>
-        <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px]">
-            <div className="flex items-center gap-[10px]">
-              <img className="w-[40px] h-[40px] rounded-full" src="/public/Ellipse 54.png" alt="" />
-              <h2 className="text-[16px]">Сделать дизайн интернет-магазина</h2>
+      <div className="flex gap-[32px] mt-[24px] lg:mt-[40px]">
+        <div className="hidden lg:block w-[250px] shrink-0">
+          <div className="bg-[#FBFBFB] p-[16px] rounded-[8px]">
+            <h2 className="font-bold">Categories</h2>
+            <div className="mt-[12px] flex flex-col gap-[12px] text-[14px]">
+              {categories.map((el) => (
+                <p key={el.id}>{el.name}</p>
+              ))}
             </div>
-            <p className="text-[14px] mt-[15px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              sed leo at hendrerit dictum diam, enim. Dolor in imperdiet
-              ultrices mauris. Est vitae vulputate est nec cras.
-            </p>
-            <button className="border border-[#1DBF73] text-[#1DBF73] rounded-full w-full p-[5px] mt-[15px]">
-              Посмотреть
-            </button>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px]">
-            <div className="flex items-center gap-[10px]">
-              <img className="w-[40px] h-[40px] rounded-full" src="/public/Ellipse 54 (1).png" alt="" />
-              <h2 className="text-[16px]">Верстка landing page</h2>
-            </div>
-            <p className="text-[14px] mt-[15px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              sed leo at hendrerit dictum diam, enim. Dolor in imperdiet
-              ultrices mauris. Est vitae vulputate est nec cras.
-            </p>
-            <button className="bg-[#1DBF73] text-white rounded-full w-full p-[5px] mt-[15px]">
-              Посмотреть
-            </button>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px]">
-            <div className="flex items-center gap-[10px]">
-              <img className="w-[40px] h-[40px] rounded-full" src="/public/Ellipse 54 (2).png" alt="" />
-              <h2 className="text-[16px]">Сделать дизайн сайта-каталога</h2>
-            </div>
-            <p className="text-[14px] mt-[15px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              sed leo at hendrerit dictum diam, enim. Dolor in imperdiet
-              ultrices mauris. Est vitae vulputate est nec cras.
-            </p>
-            <button className="border border-[#1DBF73] text-[#1DBF73] rounded-full w-full p-[5px] mt-[15px]">
-              Посмотреть
-            </button>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px]">
-            <div className="flex items-center gap-[10px]">
-              <img className="w-[40px] h-[40px] rounded-full" src="/public/Ellipse 54 (3).png" alt="" />
-              <h2 className="text-[16px]">Продвижение instagram</h2>
-            </div>
-            <p className="text-[14px] mt-[15px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              sed leo at hendrerit dictum diam, enim. Dolor in imperdiet
-              ultrices mauris. Est vitae vulputate est nec cras.
-            </p>
-            <button className="border border-[#1DBF73] text-[#1DBF73] rounded-full w-full p-[5px] mt-[15px]">
-              Посмотреть
-            </button>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px]">
-            <div className="flex items-center gap-[10px]">
-              <img className="w-[40px] h-[40px] rounded-full" src="/public/Ellipse 54 (4).png" alt="" />
-              <h2 className="text-[16px]">Срочно! Нужен веб дизайнер!</h2>
-            </div>
-            <p className="text-[14px] mt-[15px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              sed leo at hendrerit dictum diam, enim. Dolor in imperdiet
-              ultrices mauris. Est vitae vulputate est nec cras.
-            </p>
-            <button className="border border-[#1DBF73] text-[#1DBF73] rounded-full w-full p-[5px] mt-[15px]">
-              Посмотреть
-            </button>
-          </div>
-          <div className="bg-[#F2F0FE] rounded-[20px] flex justify-center items-center text-[#1DBF73] text-[18px]">
-            Смотреть все ворки
-          </div>
-        </div>
-      </section>
 
-      <section className="mt-[60px] p-[10px]">
-        <h1 className="text-[25px]">Топ фрилансеров</h1>
-        <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px] flex gap-[15px]">
-            <img className="w-[100px] h-[100px] rounded-full" src="/public/Ellipse 54 (3).png" alt="" />
-            <div className="flex flex-col gap-[5px] text-left">
-              <h2 className="text-[16px]">Марина Королёва</h2>
-              <p className="text-[#FBA457]">Разработчик PHP</p>
-              <p className="text-[12px]">Выполнено проектов: 65</p>
-              <p className="text-[#FBA457]">★★★★★</p>
-              <button className="bg-[#1DBF73] text-white w-[200px] m-auto rounded-full p-[5px]">
-                Написать
-              </button>
-            </div>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px] flex gap-[15px]">
-            <img className="w-[100px] h-[100px] rounded-full" src="/public/Group 18.png" alt="" />
-            <div className="flex flex-col gap-[5px] text-left">
-              <h2 className="text-[16px]">Семён Сергеев</h2>
-              <p className="text-[#FBA457]">Копирайтер</p>
-              <p className="text-[12px]">Выполнено проектов: 104</p>
-              <p className="text-[#FBA457]">★★★★★</p>
-              <button className="border border-[#1DBF73] w-[200px] m-auto text-[#1DBF73] rounded-full p-[5px]">
-                Написать
-              </button>
-            </div>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px] flex gap-[15px]">
-            <img className="w-[100px] h-[100px] rounded-full" src="/public/Group 18 (3).png" alt="" />
-            <div className="flex flex-col gap-[5px] text-left">
-              <h2 className="text-[16px]">Ангелина Сорокина</h2>
-              <p className="text-[#FBA457]">Дизайнер сайтов</p>
-              <p className="text-[12px]">Выполнено проектов: 25</p>
-              <p className="text-[#FBA457]">★★★★★</p>
-              <button className="border border-[#1DBF73] w-[200px] m-auto text-[#1DBF73] rounded-full p-[5px]">
-                Написать
-              </button>
-            </div>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px] flex gap-[15px]">
-            <img className="w-[100px] h-[100px] rounded-full" src="/public/Group 18 (1).png" alt="" />
-            <div className="flex flex-col gap-[5px] text-left">
-              <h2 className="text-[16px]">Никита Зайцев</h2>
-              <p className="text-[#FBA457]">Маркетолог</p>
-              <p className="text-[12px]">Выполнено проектов: 144</p>
-              <p className="text-[#FBA457]">★★★★★</p>
-              <button className="border border-[#1DBF73] w-[200px] m-auto text-[#1DBF73] rounded-full p-[5px]">
-                Написать
-              </button>
-            </div>
-          </div>
-          <div className="border border-[#F2F0FE] bg-white rounded-[20px] p-[15px] flex gap-[15px]">
-            <img className="w-[100px] h-[100px] rounded-full" src="/public/Group 18 (2).png" alt="" />
-            <div className="flex flex-col gap-[5px] text-left">
-              <h2 className="text-[16px]">Наталья Захарова</h2>
-              <p className="text-[#FBA457]">Motion дизайнер</p>
-              <p className="text-[12px]">Выполнено проектов: 71</p>
-              <p className="text-[#FBA457]">★★★★★</p>
-              <button className="border border-[#1DBF73] w-[200px] m-auto text-[#1DBF73] rounded-full p-[5px]">
-                Написать
-              </button>
-            </div>
-          </div>
-          <div className="bg-[#F2F0FE] rounded-[20px] flex justify-center items-center text-[#1DBF73] text-[18px] text-center p-[20px]">
-            Посмотреть всех ТОП фрилансеров
+            <h2 className="mt-[32px] font-bold">Price Range</h2>
+            <input
+              type="range"
+              min={0}
+              max={200}
+              value={selectedPrice}
+              onChange={(e) => setSelectedPrice(Number(e.target.value))}
+              className="accent-[#46A358] w-[200px]"
+            />
+            <p className="mt-[12px] text-[14px]">
+              Price: 
+              <span className="font-bold text-[#46A358]">
+                $0 - ${selectedPrice}
+              </span>
+            </p>
           </div>
         </div>
-      </section>
 
-      <section className="mt-[60px] p-[10px] text-left">
-        <h1 className="text-[25px]">Как решать задачи на WorkTap?</h1>
-        <p className="mt-[5px]">Идеально подходит для бизнеса и частных лиц</p>
-        <div className="grid grid-cols-3 gap-[20px] mt-[30px]">
-          <div className="flex flex-col gap-[10px]">
-            <img className="w-[60px] h-[60px]" src="/public/Group (4).svg" alt="" />
-            <h3 className="text-[18px]">Выберите услугу</h3>
-            <p className="text-[14px]">
-              В супермаркете WorkTap представлен широкий выбор услуг от
-              квалифицированных специалистов.
-            </p>
+        <div className="flex-1">
+          <div className="flex gap-[24px] text-[14px] lg:text-[16px]">
+            <button className="border-b-[2px] border-[#46A358] pb-[4px] font-bold text-[#46A358]">
+              All Plants
+            </button>
+            <button>New Arrivals</button>
+            <button>Sale</button>
           </div>
-          <div className="flex flex-col gap-[10px]">
-            <img className="w-[60px] h-[60px]" src="/public/Group 23.svg" alt="" />
-            <h3 className="text-[18px]">Оплатите</h3>
-            <p className="text-[14px]">
-              Деньги будут перечислены продавцу после того, как он выполнит
-              работу, и вы её одобрите.
-            </p>
-          </div>
-          <div className="flex flex-col gap-[10px]">
-            <img className="w-[60px] h-[60px]" src="/public/Group (5).svg" alt="" />
-            <h3 className="text-[18px]">Получите результат</h3>
-            <p className="text-[14px]">
-              Наш супермаркет гарантирует вам возврат средств в полном объёме в
-              случае невыполнения заказа.
-            </p>
+
+          <div className="mt-[24px] grid grid-cols-2 lg:grid-cols-3 gap-[16px] lg:gap-[32px]">
+            {filteredProducts.map((el) => (
+              <Link key={el.id} to={`/product/${el.id}`}>
+                <div className="flex aspect-square items-center justify-center rounded-[8px] bg-[#F5F5F5]">
+                  <img
+                    src={el.img}
+                    alt={el.name}
+                    className="w-[80%] h-[80%] object-contain"
+                  />
+                </div>
+                <h3 className="mt-[12px] text-[14px] lg:text-[16px]">
+                  {el.name}
+                </h3>
+                <p className="font-bold text-[#46A358]">${el.price}</p>
+              </Link>
+            ))}
+            {filteredProducts.length === 0 && <p>Ничего не найдено</p>}
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="mt-[60px] bg-[#EFB400] p-[40px] flex justify-between items-center">
-        <div className="flex flex-col gap-[20px] text-left w-[45%]">
-          <h2 className="text-[22px] text-white">
-            Как WorkTap помогает бизнесу?
-          </h2>
-          <div className="bg-white rounded-[15px] p-[15px] flex items-center gap-[15px]">
-            <img className="w-[30px] h-[30px]" src="/public/credit-card 1.svg" alt="" />
-            <p className="text-[14px]">Оплачивайте с р/с или карты компании</p>
-          </div>
-          <div className="bg-white rounded-[15px] p-[15px] flex items-center gap-[15px]">
-            <img className="w-[30px] h-[30px]" src="/public/money (1) 1.svg" alt="" />
-            <p className="text-[14px]">Экономьте до 87% бюджета на фрилансе</p>
-          </div>
-          <div className="bg-white rounded-[15px] p-[15px] flex items-center gap-[15px]">
-            <img className="w-[30px] h-[30px]" src="/public/clock 1.svg" alt="" />
-            <p className="text-[14px]">
-              Экономьте до 75% времени на решении фриланс задач
-            </p>
-          </div>
-          <p className="text-white">WorkTap — быстро, просто и безопасно!</p>
-          <button className="bg-[#5D50E3] text-white rounded-full w-[150px] p-[12px]">
-            Начать!
-          </button>
-        </div>
-        <img className="w-[50%]" src="/public/workspace-with-office-supplies 1.png" alt="" />
-      </section>
 
-      <footer className="bg-[#F2F0FE] p-[40px] text-left">
-        <div className="grid grid-cols-4 gap-[20px]">
-          <div className="flex flex-col gap-[8px]">
-            <h3 className="text-[18px]">Топ категории</h3>
-            <p className="text-[12px]">Тексты и переводы</p>
-            <p className="text-[12px]">Разработка</p>
-            <p className="text-[12px]">Дизайн</p>
-            <p className="text-[12px]">Аудио, видео монтаж</p>
-            <p className="text-[12px]">Соцсети и реклама</p>
-            <p className="text-[12px]">Бизнес и жизнь</p>
-            <p className="text-[12px]">SEO и оптимизация</p>
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <h3 className="text-[18px]">О Проекте</h3>
-            <p className="text-[12px]">О Нас</p>
-            <p className="text-[12px]">Как Это Работает</p>
-            <p className="text-[12px]">Политика Приватности</p>
-            <p className="text-[12px]">Правила Пользования</p>
-            <p className="text-[12px]">Пресса о нас</p>
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <h3 className="text-[18px]">Поддержка</h3>
-            <p className="text-[12px]">Контакты</p>
-            <p className="text-[12px]">Политика Безопасности</p>
-            <p className="text-[12px]">FAQ</p>
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <h3 className="text-[18px]">Follow</h3>
-            <div className="flex gap-[10px]">
-              <img className="w-[25px] h-[25px]" src="/public/akar-icons_facebook-fill.png" alt="" />
-              <img className="w-[25px] h-[25px]" src="/public/ant-design_twitter-circle-filled.png" alt="" />
-              <img className="w-[25px] h-[25px]" src="/public/Group 35.png" alt="" />
-              <img className="w-[25px] h-[25px]" src="/public/entypo-social_linkedin-with-circle.png" alt="" />
+      <footer className="mt-[64px] bg-[#FBFBFB] text-[#3D3D3D]">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="flex flex-col gap-[24px] px-[20px] py-[24px] lg:flex-row">
+            <div className="lg:w-[25%] lg:pr-[24px]">
+              <img src="/public/Group 22 (1).png" alt="" className="w-[100px] h-[100px]" />
+              <h3 className="mt-[16px] font-bold">Garden Care</h3>
+              <p className="mt-[8px] text-[14px] text-gray-500">
+                We are an online plant shop offering a wide range of cheap and
+                trendy plants.
+              </p>
+            </div>
+
+            <div className="lg:w-[25%] lg:pr-[24px]">
+              <img src="/public/Group 21.png" alt="" className="w-[100px] h-[100px]" />
+              <h3 className="mt-[16px] font-bold">Plant Renovation</h3>
+              <p className="mt-[8px] text-[14px] text-gray-500">
+                We are an online plant shop offering a wide range of cheap and
+                trendy plants.
+              </p>
+            </div>
+
+            <div className="lg:w-[25%] lg:pr-[24px]">
+              <img src="/public/Group 20 (2).png" alt="" className="w-[100px] h-[100px]" />
+              <h3 className="mt-[16px] font-bold">Watering Graden</h3>
+              <p className="mt-[8px] text-[14px] text-gray-500">
+                We are an online plant shop offering a wide range of cheap and
+                trendy plants.
+              </p>
+            </div>
+
+            <div className="lg:w-[25%]">
+              <h3 className="text-[18px] font-bold">
+                Would you like to join newsletters?
+              </h3>
+              <div className="mt-[16px] flex rounded-[6px]">
+                <input
+                  className="w-[70%] bg-white border border-[#80808041] px-[12px] py-[10px] text-[14px]"
+                  placeholder="enter your email address..."
+                />
+                <button className="w-[30%] bg-[#46A358] font-bold text-white">
+                  Join
+                </button>
+              </div>
+              <p className="mt-[16px] text-[13px] text-gray-500">
+                We usually post offers and challenges in newsletter. We're your
+                online houseplant destination. We offer a wide range of
+                houseplants and accessories shipped directly from our
+                (green)house to yours!
+              </p>
             </div>
           </div>
+
+          <div className="flex flex-col gap-[16px] bg-[#46A3581A] px-[20px] py-[16px] lg:flex-row lg:items-center">
+            <div className="lg:w-[25%]">
+              <img src="/public/Logo (17).png" alt="" className="h-[32px]" />
+            </div>
+
+            <div className="flex items-center gap-[12px] text-[14px] lg:w-[25%]">
+            
+              <p>70 West Buckingham Ave. Farmingdale, NY 11735</p>
+            </div>
+
+            <div className="flex items-center gap-[12px] text-[14px] lg:w-[25%]">
+            
+              <p>contact@greenshop.com</p>
+            </div>
+
+            <div className="flex items-center gap-[12px] text-[14px] lg:w-[25%]">
+  
+              <p>+88 01911 717 490</p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-[24px] px-[20px] py-[24px] lg:flex-row">
+            <div className="flex flex-col gap-[10px] text-[14px] lg:w-[25%]">
+              <h3 className="mb-[4px] text-[18px] font-bold">My Account</h3>
+              <p>My Account</p>
+              <p>Our stores</p>
+              <p>Contact us</p>
+              <p>Career</p>
+              <p>Specials</p>
+            </div>
+
+            <div className="flex flex-col gap-[10px] text-[14px] lg:w-[25%]">
+              <h3 className="mb-[4px] text-[18px] font-bold">Help & Guide</h3>
+              <p>Help Center</p>
+              <p>How to Buy</p>
+              <p>Shipping & Delivery</p>
+              <p>Product Policy</p>
+              <p>How to Return</p>
+            </div>
+
+            <div className="flex flex-col gap-[10px] text-[14px] lg:w-[25%]">
+              <h3 className="mb-[4px] text-[18px] font-bold">Categories</h3>
+              <p>House Plants</p>
+              <p>Potter Plants</p>
+              <p>Seeds</p>
+              <p>Small Plants</p>
+              <p>Accessories</p>
+            </div>
+
+            <div className="lg:w-[25%]">
+
+
+              <h3 className="mt-[32px] text-[18px] font-bold">We accept</h3>
+              <div className="mt-[16px]">
+                <img src="/public/image 16.png" alt="" className="h-[30px]" />
+              </div>
+            </div>
+          </div>
+
+          <p className="py-[12px] text-center text-[13px] text-gray-500">
+            © 2021 GreenShop. All Rights Reserved.
+          </p>
         </div>
-        <p className="text-center text-[12px] mt-[40px]">
-          Copyright @ 2021 | WorkTap – Worktap.KZ. All Rights Reserved
-        </p>
       </footer>
     </div>
   );

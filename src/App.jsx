@@ -5,7 +5,7 @@ import Birjha from './pages/Birjha';
 import Vorki from './pages/Vorki';
 import Konkursi from './pages/Konkursi';
 import Sozdatwork from './pages/Sozdatwork';
-import Sozdatzakaz from './pages/Sozdatzakaz';
+import ProductView from "./pages/ProductView";
 const App = () => {
   const router = createBrowserRouter([
   {
@@ -29,8 +29,8 @@ const App = () => {
     element:<Sozdatwork/>
   },
   {
-    path:'/sozdatzakaz',
-    element:<Sozdatzakaz/>
+    path:'/product/:id',
+    element:<ProductView/>
   }
     ]
   }

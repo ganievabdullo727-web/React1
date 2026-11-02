@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Konkursi = () => {
-  return (
-    <div>Konkursi</div>
-  )
-}
+  return <div>Konkursi</div>;
+};
 
-export default Konkursi
+export default Konkursi;

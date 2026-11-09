@@ -1,20 +1,43 @@
+import axios from "axios";
 import { create } from "zustand";
 
-export const useTodo = create((set) => ({
-  data: [
-    { id: 1, name: "Abdullo", job: "student" },
-    { id: 2, name: "Hoji", job: "puple" },
-  ],
-  deleteUser: (id) =>
-    set((state) => ({
-      data: state.data.filter((e) => e.id !== id),
-    })),
-  editUser: (id, newData) =>
-    set((state) => ({
-      data: state.data.map((e) => (e.id === id ? { ...e, ...newData } : e)),
-    })),
-  addUser: (user) =>
-    set((state) => ({
-      data: [...state.data, { id: Date.now(), ...user }],
-    })),
+const api = "/api/to-dos";
+
+export const useTodo = create((set, get) => ({
+  data: [],
+  getData: async () => {
+    try {
+      const { data } = await axios.get(api);
+      set({ data: data.data });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  addUser: async (user) => {
+    try {
+      const formData = new FormData();
+      formData.append("Name", user.name);
+      formData.append("Description", user.description);
+      await axios.post(api, formData);
+      get().getData();
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  editUser: async (user) => {
+    try {
+      await axios.put(api, user);
+      get().getData();
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  deleteUser: async (id) => {
+    try {
+      await axios.delete(`${api}?id=${id}`);
+      get().getData();
+    } catch (e) {
+      console.error(e);
+    }
+  },
 }));

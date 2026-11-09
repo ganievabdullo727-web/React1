@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTodo } from "../store/todo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,49 +17,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-let Home = () => {
-  let { data, deleteUser, editUser, addUser } = useTodo();
+const Home = () => {
+  const { data, getData, addUser, editUser, deleteUser } = useTodo();
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [editId, setEditId] = useState(null);
 
-  let [addOpen, setAddOpen] = useState(false);
-  let [editOpen, setEditOpen] = useState(false);
-  let [editId, setEditId] = useState(null);
-  let [name, setName] = useState("");
-  let [job, setJob] = useState("");
+  useEffect(() => {
+    getData();
+  }, []);
 
-  let openAdd = () => {
+  const openAdd = () => {
+    setEditId(null);
     setName("");
-    setJob("");
-    setAddOpen(true);
+    setDescription("");
+    setOpen(true);
   };
 
-  let openEdit = (user) => {
+  const openEdit = (user) => {
     setEditId(user.id);
     setName(user.name);
-    setJob(user.job);
-    setEditOpen(true);
+    setDescription(user.description);
+    setOpen(true);
   };
 
-  let handleAdd = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addUser({ name, job });
-    setAddOpen(false);
-  };
-
-  let handleEdit = (e) => {
-    e.preventDefault();
-    editUser(editId, { name, job });
-    setEditOpen(false);
+    if (editId) await editUser({ id: editId, name, description });
+    else await addUser({ name, description });
+    setOpen(false);
   };
 
   return (
-    <div className="w-full space-y-4 p-4">
-      <Button onClick={openAdd}>Add user</Button>
+    <div className="p-4 space-y-4">
+      <Button onClick={openAdd}>Add</Button>
 
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
-            <TableHead>Job</TableHead>
+            <TableHead>Description</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -67,61 +65,25 @@ let Home = () => {
           {data.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.name}</TableCell>
-              <TableCell>{user.job}</TableCell>
+              <TableCell>{user.description}</TableCell>
               <TableCell className="space-x-2 text-right">
-                <Button variant="outline" onClick={() => openEdit(user)}>
-                  Edit
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => deleteUser(user.id)}
-                >
-                  Delete
-                </Button>
+                <Button variant="outline" onClick={() => openEdit(user)}>Edit</Button>
+                <Button variant="destructive" onClick={() => deleteUser(user.id)}>Delete</Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add user</DialogTitle>
+            <DialogTitle>{editId ? "Edit" : "Add"}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleAdd} className="space-y-4">
-            <Input
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              placeholder="Job"
-              value={job}
-              onChange={(e) => setJob(e.target.value)}
-            />
-            <Button type="submit">Add</Button>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit user</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleEdit} className="space-y-4">
-            <Input
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              placeholder="Job"
-              value={job}
-              onChange={(e) => setJob(e.target.value)}
-            />
-            <Button type="submit">Save</Button>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <Button type="submit">{editId ? "Save" : "Add"}</Button>
           </form>
         </DialogContent>
       </Dialog>

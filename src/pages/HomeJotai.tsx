@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { useTodo } from "../store/todo";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  usersAtom,
+  getDataAtom,
+  addUserAtom,
+  editUserAtom,
+  deleteUserAtom,
+} from "../store/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,8 +24,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const Home = () => {
-  const { data, getData, addUser, editUser, deleteUser } = useTodo();
+const HomeJotai = () => {
+  const data = useAtomValue(usersAtom);
+  const getData = useSetAtom(getDataAtom);
+  const addUser = useSetAtom(addUserAtom);
+  const editUser = useSetAtom(editUserAtom);
+  const deleteUser = useSetAtom(deleteUserAtom);
+
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -91,4 +103,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeJotai;

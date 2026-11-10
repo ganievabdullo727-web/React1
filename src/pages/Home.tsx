@@ -1,94 +1,54 @@
-import { useEffect, useState } from "react";
-import { useTodo } from "../store/todo";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { AppStore } from '@/app/store'
+import { addUser, deleteUser, editUser } from '@/store/counterSlice'
+import { useState } from 'react'
+import { useDispatch, useSelector} from 'react-redux'
 
 const Home = () => {
-  const { data, getData, addUser, editUser, deleteUser } = useTodo();
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [editId, setEditId] = useState(null);
+ const {data} = useSelector((store:AppStore)=>store.counter)
+const dispatch  = useDispatch()
+const [elem,setElem] = useState({id:null,name:"",age:null,job:""})
+const handleSubmit =(event)=>{
+  event.preventDefault()
+  const newUser={
+    id:elem.id?elem.id:Date.now(),
+    name:event.target.name.value,
+    age:event.target.age.value,
+    job:event.target.job.value,
+  }
+  elem.id? dispatch(editUser(newUser)):  dispatch(addUser(newUser))
+  event.target.reset()
+  setElem({id:null,name:"",age:null,job:""})
+}
 
-  useEffect(() => {
-    getData();
-  }, []);
+const handleEdit =(e)=>{
+  setElem(e)
 
-  const openAdd = () => {
-    setEditId(null);
-    setName("");
-    setDescription("");
-    setOpen(true);
-  };
-
-  const openEdit = (user) => {
-    setEditId(user.id);
-    setName(user.name);
-    setDescription(user.description);
-    setOpen(true);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (editId) await editUser({ id: editId, name, description });
-    else await addUser({ name, description });
-    setOpen(false);
-  };
-
+}
   return (
-    <div className="p-4 space-y-4">
-      <Button onClick={openAdd}>Add</Button>
+    <div>
+<form onSubmit={handleSubmit} action="">
+  <input className='border rounded-2xl p-[5px]' placeholder='name' defaultValue={elem.name} name='name' type="text" />
+  <input className='border rounded-2xl p-[5px]' placeholder='age' defaultValue={elem.age} name='age' type="number" />
+  <input className='border rounded-2xl p-[5px]' placeholder='job' defaultValue={elem.job} name='job' type="text" />
+  <button type='submit'>{elem.id?"save":"submit"}</button>
+</form>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.description}</TableCell>
-              <TableCell className="space-x-2 text-right">
-                <Button variant="outline" onClick={() => openEdit(user)}>Edit</Button>
-                <Button variant="destructive" onClick={() => deleteUser(user.id)}>Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editId ? "Edit" : "Add"}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-            <Button type="submit">{editId ? "Save" : "Add"}</Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+<div>
+  {
+    data.map((e)=>{
+      return <div className='flex gap-3 '>
+        <h1>{e.name} :</h1>
+        <p>{e.age} :</p>
+        <p>{e.job} :</p>
+        <button className='text-[red]' onClick={()=>dispatch(deleteUser(e.id))}>delete</button>
+        <button className='text-[blue]' onClick={()=>handleEdit(e)}>edit</button>
+      </div>
+    })
+  }
+</div>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

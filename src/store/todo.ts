@@ -5,7 +5,7 @@ const api = "/api/to-dos";
 
 export const useTodo = create((set, get) => ({
   data: [],
-  getData: async () => {
+  getData:  () => {
     try {
       const { data } = await axios.get(api);
       set({ data: data.data });
@@ -13,7 +13,7 @@ export const useTodo = create((set, get) => ({
       console.error(e);
     }
   },
-  addUser: async (user) => {
+  addUser: = (user) => {
     try {
       const formData = new FormData();
       formData.append("Name", user.name);
@@ -24,7 +24,7 @@ export const useTodo = create((set, get) => ({
       console.error(e);
     }
   },
-  editUser: async (user) => {
+  editUser:  (user) => {
     try {
       await axios.put(api, user);
       get().getData();
@@ -32,7 +32,7 @@ export const useTodo = create((set, get) => ({
       console.error(e);
     }
   },
-  deleteUser: async (id) => {
+  deleteUser:  (id) => {
     try {
       await axios.delete(`${api}?id=${id}`);
       get().getData();

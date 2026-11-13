@@ -1,106 +1,117 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-const empty = { id: '', name: '', email: '' }
+const App = () => {
+  let [data, setData] = useState([{ id: 1, name: 'Abdullo', age: 16 }])
+  let [search, setSearch] = useState('')
+  let [open, setOpen] = useState(false)
+  let [idx, setIdx] = useState(null)
 
-function getUsers() {
-    const users = localStorage.getItem('user')
-    return users ? JSON.parse(users) : []
-}
+  let {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ defaultValues: { name: '', age: '' } })
 
-function App() {
-    const [list, setList] = useState(getUsers)
-    const [success, setSuccess] = useState(false)
+  let {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    reset: resetEdit,
+    formState: { errors: errorsEdit },
+  } = useForm()
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        watch,
-        formState: { errors, isValid }
-    } = useForm({ mode: 'onBlur', defaultValues: empty })
+  let handleAdd = (e) => {
+    setData([...data, { id: Date.now(), name: e.name, age: e.age }])
+    reset()
+  }
 
-    const isEdit = !!watch('id')
+  let handleDelete = (id) => {
+    setData(data.filter((e) => e.id != id))
+  }
 
-    const sync = (next) => {
-        localStorage.setItem('user', JSON.stringify(next))
-        setList(next)
-    }
+  let openEdit = (e) => {
+    setIdx(e.id)
+    resetEdit({ name: e.name, age: e.age })
+    setOpen(true)
+  }
 
-    // Add / Edit
-    const onSubmit = (data) => {
-        const next = data.id
-            ? list.map((u) => (u.id === data.id ? data : u))
-            : [...list, { ...data, id: String(Date.now()) }]
+  let handleEdit = (e) => {
+    setData(data.map((el) => (el.id == idx ? { ...el, name: e.name, age: e.age } : el)))
+    setOpen(false)
+  }
 
-        sync(next)
-        setSuccess(true)
-        setTimeout(() => setSuccess(false), 2000)
-        reset(empty)
-    }
+  let filteredData = data.filter((e) =>
+    e.name.toLowerCase().includes(search.toLowerCase().trim())
+  )
 
-    // Delete
-    const remove = (id) => sync(list.filter((u) => u.id !== id))
+  const input = 'border rounded p-2 w-full'
+  const btn = 'border rounded px-3 py-1'
 
-    return (
-        <div className="p-10 flex flex-col items-start gap-10">
-            <h1 className="font-semibold text-2xl">React Hook Form CRUD</h1>
+  return (
+    <div className="max-w-sm mx-auto p-6 flex flex-col gap-4">
+      <input
+        className={input}
+        placeholder="Search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 w-80">
-                <input type="hidden" {...register('id')} />
+      <form onSubmit={handleSubmit(handleAdd)} className="flex flex-col gap-2">
+        <input
+          className={input}
+          placeholder="Name..."
+          {...register('name', {
+            required: 'Write your name please',
+            minLength: { value: 3, message: 'Min 3 characters' },
+          })}
+        />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
 
-                <input
-                    {...register('name', {
-                        required: 'Name is required',
-                        minLength: { value: 3, message: 'Minimum 3 characters' }
-                    })}
-                    placeholder="Name"
-                    className="border p-2 rounded"
-                />
-                {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+        <input
+          className={input}
+          type="number"
+          placeholder="Age..."
+          {...register('age', {
+            required: 'Write your age please',
+            min: { value: 1, message: 'Wrong age' },
+          })}
+        />
+        {errors.age && <p className="text-red-500 text-sm">{errors.age.message}</p>}
 
-                <input
-                    {...register('email', {
-                        required: 'Email is required',
-                        pattern: { value: /^\S+@\S+\.\S+$/, message: 'Invalid email' }
-                    })}
-                    placeholder="Email"
-                    className="border p-2 rounded"
-                />
-                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+        <button className={btn}>Add</button>
+      </form>
 
-                <button
-                    disabled={!isValid}
-                    type="submit"
-                    className={`p-2 rounded text-white ${
-                        isValid ? 'bg-blue-600' : 'bg-gray-400 cursor-not-allowed'
-                    }`}
-                >
-                    {isEdit ? 'Save' : 'Add'}
-                </button>
+      {filteredData.map((e) => (
+        <div key={e.id} className="border rounded p-3 flex flex-col gap-2">
+          <div>
+            <h2 className="font-semibold">{e.name}</h2>
+            <p className="text-sm text-gray-500">{e.age}</p>
+          </div>
+
+          <div className="flex gap-2">
+            <button className={btn} onClick={() => openEdit(e)}>Edit</button>
+            <button className={btn} onClick={() => handleDelete(e.id)}>Delete</button>
+          </div>
+
+          {open && idx == e.id ? (
+            <form onSubmit={handleSubmitEdit(handleEdit)} className="flex flex-col gap-2">
+              <input className={input} {...registerEdit('name', { required: 'Write your name please' })} />
+              {errorsEdit.name && <p className="text-red-500 text-sm">{errorsEdit.name.message}</p>}
+
+              <input className={input} type="number" {...registerEdit('age', { required: 'Write your age please' })} />
+              {errorsEdit.age && <p className="text-red-500 text-sm">{errorsEdit.age.message}</p>}
+
+              <div className="flex gap-2">
+                <button className={btn}>Save</button>
+                <button type="button" className={btn} onClick={() => setOpen(false)}>Cancel</button>
+              </div>
             </form>
-
-            <ul className="flex flex-col gap-2 w-80">
-                {list.map((u) => (
-                    <li key={u.id} className="flex items-center justify-between border p-2 rounded">
-                        <span>{u.name} — {u.email}</span>
-                        <div className="flex gap-2">
-                            <button onClick={() => reset(u)} className="text-blue-600">Edit</button>
-                            <button onClick={() => remove(u.id)} className="text-red-500">Delete</button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-
-            <div
-                className={`bg-green-600 text-white p-3 rounded transition-all duration-500 ${
-                    success ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3 pointer-events-none'
-                }`}
-            >
-                ✓ Saved successfully!
-            </div>
+          ) : null}
         </div>
-    )
+      ))}
+    </div>
+  )
 }
 
 export default App

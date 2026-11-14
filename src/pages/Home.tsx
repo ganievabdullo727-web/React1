@@ -1,30 +1,42 @@
+import { useFormik } from 'formik'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
-const App = () => {
+const validate = (e) => {
+  let errors = {}
+  if (!e.name) errors.name = 'Write your name please'
+  else if (e.name.length < 3) errors.name = 'Min 3 characters'
+  if (!e.age) errors.age = 'Write your age please'
+  else if (e.age < 1) errors.age = 'Wrong age'
+  return errors
+}
+
+const Home = () => {
   let [data, setData] = useState([{ id: 1, name: 'Abdullo', age: 16 }])
   let [search, setSearch] = useState('')
   let [open, setOpen] = useState(false)
   let [idx, setIdx] = useState(null)
 
-  let {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ defaultValues: { name: '', age: '' } })
-
-  let {
-    register: registerEdit,
-    handleSubmit: handleSubmitEdit,
-    reset: resetEdit,
-    formState: { errors: errorsEdit },
-  } = useForm()
-
-  let handleAdd = (e) => {
+  let handleAdd = (e, { resetForm }) => {
     setData([...data, { id: Date.now(), name: e.name, age: e.age }])
-    reset()
+    resetForm()
   }
+
+  let handleEdit = (e) => {
+    setData(data.map((el) => (el.id == idx ? { ...el, name: e.name, age: e.age } : el)))
+    setOpen(false)
+  }
+
+  let add = useFormik({
+    initialValues: { name: '', age: '' },
+    validate,
+    onSubmit: handleAdd,
+  })
+
+  let edit = useFormik({
+    initialValues: { name: '', age: '' },
+    validate,
+    onSubmit: handleEdit,
+  })
 
   let handleDelete = (id) => {
     setData(data.filter((e) => e.id != id))
@@ -32,13 +44,9 @@ const App = () => {
 
   let openEdit = (e) => {
     setIdx(e.id)
-    resetEdit({ name: e.name, age: e.age })
+    edit.setValues({ name: e.name, age: e.age })
+    edit.setTouched({}, false)
     setOpen(true)
-  }
-
-  let handleEdit = (e) => {
-    setData(data.map((el) => (el.id == idx ? { ...el, name: e.name, age: e.age } : el)))
-    setOpen(false)
   }
 
   let filteredData = data.filter((e) =>
@@ -57,29 +65,18 @@ const App = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <form onSubmit={handleSubmit(handleAdd)} className="flex flex-col gap-2">
-        <input
-          className={input}
-          placeholder="Name..."
-          {...register('name', {
-            required: 'Write your name please',
-            minLength: { value: 3, message: 'Min 3 characters' },
-          })}
-        />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+      <form onSubmit={add.handleSubmit} className="flex flex-col gap-2">
+        <input className={input} placeholder="Name..." {...add.getFieldProps('name')} />
+        {add.touched.name && add.errors.name && (
+          <p className="text-red-500 text-sm">{add.errors.name}</p>
+        )}
 
-        <input
-          className={input}
-          type="number"
-          placeholder="Age..."
-          {...register('age', {
-            required: 'Write your age please',
-            min: { value: 1, message: 'Wrong age' },
-          })}
-        />
-        {errors.age && <p className="text-red-500 text-sm">{errors.age.message}</p>}
+        <input className={input} type="number" placeholder="Age..." {...add.getFieldProps('age')} />
+        {add.touched.age && add.errors.age && (
+          <p className="text-red-500 text-sm">{add.errors.age}</p>
+        )}
 
-        <button className={btn}>Add</button>
+        <button type="submit" className={btn}>Add</button>
       </form>
 
       {filteredData.map((e) => (
@@ -90,21 +87,25 @@ const App = () => {
           </div>
 
           <div className="flex gap-2">
-            <button className={btn} onClick={() => openEdit(e)}>Edit</button>
-            <button className={btn} onClick={() => handleDelete(e.id)}>Delete</button>
+            <button onClick={() => openEdit(e)}>Edit</button>
+            <button onClick={() => handleDelete(e.id)}>Delete</button>
           </div>
 
           {open && idx == e.id ? (
-            <form onSubmit={handleSubmitEdit(handleEdit)} className="flex flex-col gap-2">
-              <input className={input} {...registerEdit('name', { required: 'Write your name please' })} />
-              {errorsEdit.name && <p className="text-red-500 text-sm">{errorsEdit.name.message}</p>}
+            <form onSubmit={edit.handleSubmit} className="flex flex-col gap-2">
+              <input className={input} {...edit.getFieldProps('name')} />
+              {edit.touched.name && edit.errors.name && (
+                <p className="text-red-500 text-sm">{edit.errors.name}</p>
+              )}
 
-              <input className={input} type="number" {...registerEdit('age', { required: 'Write your age please' })} />
-              {errorsEdit.age && <p className="text-red-500 text-sm">{errorsEdit.age.message}</p>}
+              <input className={input} type="number" {...edit.getFieldProps('age')} />
+              {edit.touched.age && edit.errors.age && (
+                <p className="text-red-500 text-sm">{edit.errors.age}</p>
+              )}
 
               <div className="flex gap-2">
-                <button className={btn}>Save</button>
-                <button type="button" className={btn} onClick={() => setOpen(false)}>Cancel</button>
+                <button type="submit">Save</button>
+                <button type="button" onClick={() => setOpen(false)}>Cancel</button>
               </div>
             </form>
           ) : null}
@@ -114,4 +115,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Home
